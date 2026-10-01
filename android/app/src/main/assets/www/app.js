@@ -69,29 +69,42 @@
     });
     return dbPromise;
   }
+  var memoryFiles = {};        // session-only fallback when IndexedDB is not available
+  var warnedNoStorage = false;
+  function stashInMemory(id, file) {
+    memoryFiles[id] = file;
+    if (!warnedNoStorage) {
+      warnedNoStorage = true;
+      toast('This WebView has no persistent storage — media is kept for this session', 'ⓘ');
+    }
+  }
   function dbPutFile(id, file) {
+    if (!window.indexedDB) { stashInMemory(id, file); return Promise.resolve(id); }
     return openDB().then(function (db) {
-      if (!db) return null;
+      if (!db) { stashInMemory(id, file); return id; }
       return new Promise(function (resolve) {
         var tx = db.transaction(DB_STORE, 'readwrite');
         tx.objectStore(DB_STORE).put(file, id);
         tx.oncomplete = function () { resolve(id); };
-        tx.onerror = function () { resolve(null); };
+        tx.onerror = function () { stashInMemory(id, file); resolve(id); };
       });
     });
   }
   function dbGetFile(id) {
+    if (memoryFiles[id]) return Promise.resolve(memoryFiles[id]);
+    if (!window.indexedDB) return Promise.resolve(null);
     return openDB().then(function (db) {
       if (!db) return null;
       return new Promise(function (resolve) {
         var req = db.transaction(DB_STORE, 'readonly').objectStore(DB_STORE).get(id);
-        req.onsuccess = function () { resolve(req.result || null); };
-        req.onerror = function () { resolve(null); };
+        req.onsuccess = function () { resolve(req.result || memoryFiles[id] || null); };
+        req.onerror = function () { resolve(memoryFiles[id] || null); };
       });
     });
   }
   function dbDeleteFiles(ids) {
-    if (!ids.length) return Promise.resolve();
+    ids.forEach(function (id) { delete memoryFiles[id]; });
+    if (!ids.length || !window.indexedDB) return Promise.resolve();
     return openDB().then(function (db) {
       if (!db) return;
       var tx = db.transaction(DB_STORE, 'readwrite');
@@ -103,7 +116,7 @@
   function fileUrl(fileId) {
     if (urlCache[fileId]) return Promise.resolve(urlCache[fileId]);
     return dbGetFile(fileId).then(function (blob) {
-      if (!blob) return null;
+      if (!blob || !window.URL || typeof URL.createObjectURL !== 'function') return null;
       var url = URL.createObjectURL(blob);
       urlCache[fileId] = url;
       return url;
@@ -1212,7 +1225,7 @@
     if (file.type.indexOf('video') === 0) kind = 'video';
     var fileId = uid('f');
     return dbPutFile(fileId, file).then(function (ok) {
-      if (!ok) toast('Could not store that file', '⚠');
+      if (!ok) { stashInMemory(fileId, file); }
       var layer = {
         id: uid(kind.charAt(0)), type: kind, srcKind: 'file', fileId: fileId,
         name: cleanFileName(file.name),
@@ -1505,6 +1518,7 @@
         state.projects.forEach(function (p) { p.layers.forEach(function (l) { if (l.fileId) ids.push(l.fileId); }); });
         dbDeleteFiles(ids);
         urlCache = {};
+        memoryFiles = {};
         state.projects = seedProjects().slice(1);
         persist(true);
         renderHome(); renderProjects(); closeSheet();

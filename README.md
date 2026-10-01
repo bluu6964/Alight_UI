@@ -12,7 +12,7 @@ it into a real product you can install on a phone today:
 | **Permissions** | none — the editor is fully offline, media never leaves the device |
 | **Source** | [`android/`](android) — Java host + the editor UI in [`android/app/src/main/assets/www`](android/app/src/main/assets/www) |
 | **Build** | `cd android/tools && npm install && npm run build` (no Gradle, no Android SDK needed) |
-| **Test** | `cd android/tools && npm test` — 60 headless UI checks |
+| **Test** | `cd android/tools && npm test` — 65 headless UI checks |
 
 ```bash
 # install on a connected phone (USB debugging on)
@@ -91,7 +91,7 @@ AndroidManifest.xml, res/, assets/, resources.arsc   ← the original UI dump, u
 cd android/tools
 npm install          # apk_sign_ts (APK signing) + jsdom (tests)
 npm run build        # → android/build/MotionStudio-1.0.apk  (+ copy at repo root)
-npm test             # 60 UI checks against the real editor in jsdom
+npm test             # 65 UI checks against the real editor in jsdom
 npm run icons        # regenerate mipmap icons (needs ImageMagick)
 ```
 

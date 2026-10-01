@@ -194,6 +194,21 @@ click(quickButtons[quickButtons.length - 2]); // "Solid colour"
 await tick();
 check('solid colour quick-add works', window.MS.state.project.layers.some((l) => l.srcKind === 'solid'));
 
+section('media from the device (no IndexedDB in jsdom → memory fallback)');
+check('jsdom has no IndexedDB, exercising the fallback path', !window.indexedDB);
+const clipCountBeforeFile = $$('.clip-block').length;
+const fileInput = $('#media-picker');
+const fakeFile = new window.File([new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7])], 'beach-sunset.mp4', { type: 'video/mp4' });
+Object.defineProperty(fileInput, 'files', { value: [fakeFile], configurable: true });
+fileInput.dispatchEvent(new window.Event('change', { bubbles: true }));
+await new Promise((r) => setTimeout(r, 200));
+const addedMedia = window.MS.state.project.layers.filter((l) => l.type === 'video' && l.fileId);
+check('picked file becomes a video layer', addedMedia.length >= 1, `${addedMedia.length} video layers`);
+check('layer name is cleaned up for the timeline', addedMedia.length > 0 && addedMedia[addedMedia.length - 1].name === 'beach sunset',
+  addedMedia.length ? addedMedia[addedMedia.length - 1].name : '—');
+check('timeline shows the new clip', $$('.clip-block').length > clipCountBeforeFile, `${$$('.clip-block').length} clips`);
+check('blob is still readable through the fallback store', addedMedia.length > 0 && !!window.MS.state.project.layers.find((l) => l.fileId));
+
 section('effects');
 click('[data-action="open-effects"]');
 await tick();

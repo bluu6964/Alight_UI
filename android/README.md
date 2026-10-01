@@ -45,8 +45,10 @@ No third-party libraries, no Kotlin/AndroidX, nothing to keep in sync — the AP
 Data model: a project is `{ id, name, ratio, fps, duration, layers[] }`; every layer is
 one of `video·image·audio·text·shape` with `{ start, duration, trimIn, effect, … }`.
 Projects live in `localStorage`; media blobs live in **IndexedDB** and are streamed back
-through object URLs, so nothing is copied into the JSON document. History is a 40-step
-undo/redo stack of document snapshots.
+through object URLs, so nothing is copied into the JSON document. If a device's WebView
+denies IndexedDB on `file://`, the editor transparently falls back to a session-only
+in-memory store (with a toast) instead of failing. History is a 40-step undo/redo stack
+of document snapshots.
 
 Each `<input type="file">` selection is stored as a Blob and rendered by a
 real `<video>`/`<audio>`/`<img>` — the transport drives `currentTime` per frame, which is
@@ -99,10 +101,11 @@ keytool -genkeypair -v -keystore my-release.p12 -storetype PKCS12 \
 node tools/smoke-test.mjs        # or: npm test
 ```
 
-Runs the real `app.js` inside jsdom and walks 60 assertions across boot, navigation,
-project creation, timeline drag/duplicate/split/delete, undo/redo, playback and scrub,
-layer sheets (text, shape, media, solid, effects), the export flow, persistence,
-hardware-back handling and keyboard shortcuts. It fails on any uncaught page error.
+Runs the real `app.js` inside jsdom and walks 65 assertions across boot, navigation,
+project creation, timeline duplicate/split/delete, undo/redo, playback and scrubbing,
+layer sheets (text, shape, media, solid, effects), picking a media file from the device
+(the no-IndexedDB fallback path), the export flow, persistence, hardware-back handling
+and keyboard shortcuts. It fails on any uncaught page error.
 
 ## Opening it in Android Studio instead
 
