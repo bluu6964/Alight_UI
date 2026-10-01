@@ -1,0 +1,21 @@
+{
+  "name": "motion-studio-build",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Local APK build pipeline + UI smoke test for the Motion Studio Android app (no Android SDK / Gradle required).",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "build:unsigned": "node build.mjs --skip-sign",
+    "test": "node smoke-test.mjs",
+    "test:verbose": "node smoke-test.mjs --verbose",
+    "icons": "bash make-icons.sh",
+    "fetch-tools": "node build.mjs --fetch-tools"
+  },
+  "dependencies": {
+    "apk_sign_ts": "^1.0.1"
+  },
+  "devDependencies": {
+    "jsdom": "^27.0.0"
+  }
+}

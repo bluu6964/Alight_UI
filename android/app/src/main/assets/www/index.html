@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#090a0f">
+  <meta name="color-scheme" content="dark">
+  <title>Motion Studio</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <main class="main-view" id="main-view">
+      <section class="main-screen active" id="home-screen" aria-label="Home">
+        <header class="app-header">
+          <a class="brand" href="#home" aria-label="Motion Studio home">
+            <span class="brand-mark"><i></i><b></b></span>
+            <span class="brand-name">motion<span>studio</span></span>
+          </a>
+          <div class="header-actions">
+            <button class="icon-button" data-action="settings" aria-label="Settings"><span class="icon">⚙</span></button>
+            <button class="avatar-button" data-action="profile" aria-label="Your profile">A</button>
+          </div>
+        </header>
+        <div class="main-scroll">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow">YOUR CREATIVE SPACE</p>
+              <h1>Make it <span>move.</span></h1>
+              <p class="subcopy">Every great idea starts with a frame.</p>
+            </div>
+            <div class="sparkle-mark" aria-hidden="true">✳</div>
+          </div>
+
+          <button class="create-hero" data-action="new-project">
+            <span class="hero-orb orb-one"></span><span class="hero-orb orb-two"></span><span class="hero-orb orb-three"></span>
+            <span class="hero-copy">
+              <span class="hero-kicker"><span class="live-dot"></span> START CREATING</span>
+              <strong>New project</strong>
+              <span>Turn your clips into a story.</span>
+              <span class="hero-cta"><span>＋</span> Create project</span>
+            </span>
+            <span class="hero-art" aria-hidden="true"><span class="art-ring ring-a"></span><span class="art-ring ring-b"></span><span class="art-ring ring-c"></span><span class="art-core">▶</span><span class="art-star">✦</span></span>
+            <span class="hero-arrow" aria-hidden="true">↗</span>
+          </button>
+
+          <div class="section-heading">
+            <div><p class="eyebrow">PICK UP WHERE YOU LEFT OFF</p><h2>Recent projects <span class="count-pill" id="project-count">0</span></h2></div>
+            <button class="text-button" data-nav="projects">View all <span>→</span></button>
+          </div>
+          <div id="home-projects" class="project-list"></div>
+
+          <div class="section-heading tools-heading">
+            <div><p class="eyebrow">A FEW WAYS TO BEGIN</p><h2>Quick start</h2></div>
+          </div>
+          <div class="quick-grid">
+            <button class="quick-card" data-action="new-project" data-ratio="9:16"><span class="quick-icon vertical-icon">▯</span><span><strong>Social video</strong><small>9:16 · Portrait</small></span><span class="quick-chevron">↗</span></button>
+            <button class="quick-card" data-action="new-project" data-ratio="16:9"><span class="quick-icon landscape-icon">▭</span><span><strong>Widescreen</strong><small>16:9 · Landscape</small></span><span class="quick-chevron">↗</span></button>
+          </div>
+          <div class="tip-card"><span class="tip-icon">✦</span><div><strong>Small tip, big impact</strong><p>Keep your cuts on the beat. Add music to find your rhythm.</p></div><button data-action="open-media" data-kind="audio" aria-label="Add audio">＋</button></div>
+          <div class="bottom-spacer"></div>
+        </div>
+      </section>
+
+      <section class="main-screen" id="projects-screen" aria-label="Projects">
+        <header class="app-header">
+          <div><p class="eyebrow">YOUR WORKSPACE</p><h1 class="screen-title">Projects</h1></div>
+          <button class="round-add" data-action="new-project" aria-label="Create project">＋</button>
+        </header>
+        <div class="main-scroll projects-scroll">
+          <div class="projects-toolbar"><span id="projects-summary">Your edits, all in one place.</span><button class="sort-button" data-action="sort-projects">Recently edited <span>⌄</span></button></div>
+          <div id="all-projects" class="project-list full-project-list"></div>
+          <div class="bottom-spacer"></div>
+        </div>
+      </section>
+
+      <section class="main-screen" id="effects-screen" aria-label="Effects">
+        <header class="app-header effects-header">
+          <div><p class="eyebrow">MAKE EVERY FRAME YOURS</p><h1 class="screen-title">Effects</h1></div>
+          <button class="icon-button" data-action="effect-search" aria-label="Search effects"><span class="icon">⌕</span></button>
+        </header>
+        <div class="main-scroll effects-scroll">
+          <div class="effects-intro"><span class="effects-badge">✦</span><div><strong>Find your signature look</strong><p>Explore a few studio favourites, then try them on your clip.</p></div></div>
+          <div class="chip-row" id="effect-categories">
+            <button class="filter-chip selected" data-effect-category="All">All</button>
+            <button class="filter-chip" data-effect-category="Color">Color</button>
+            <button class="filter-chip" data-effect-category="Blur">Blur</button>
+            <button class="filter-chip" data-effect-category="Motion">Motion</button>
+          </div>
+          <div class="effect-grid" id="effect-grid"></div>
+          <div class="bottom-spacer"></div>
+        </div>
+      </section>
+
+      <section class="main-screen" id="profile-screen" aria-label="Profile and settings">
+        <header class="app-header profile-header"><div><p class="eyebrow">MAKE YOURS</p><h1 class="screen-title">Your studio</h1></div><span class="avatar-large">A</span></header>
+        <div class="main-scroll profile-scroll">
+          <div class="profile-card"><div class="profile-shape"></div><div class="profile-letter">A</div><div><strong>Creative mode</strong><p>Everything you need to bring an idea to life.</p></div><span class="pro-pill">FREE</span></div>
+          <p class="eyebrow settings-label">PREFERENCES</p>
+          <div class="settings-list">
+            <button class="settings-item" data-action="settings"><span class="settings-icon">⚙</span><span><strong>Editor settings</strong><small>Preview, autosave and appearance</small></span><span class="settings-chevron">›</span></button>
+            <button class="settings-item" data-action="storage"><span class="settings-icon">▤</span><span><strong>Local storage</strong><small>Projects stay on this device</small></span><span class="settings-chevron">›</span></button>
+            <button class="settings-item" data-action="about"><span class="settings-icon">ⓘ</span><span><strong>About Motion Studio</strong><small>Version 1.0 · Made for your ideas</small></span><span class="settings-chevron">›</span></button>
+          </div>
+          <div class="privacy-note"><span>🔒</span><p>Your media and projects are processed on this device. Nothing is uploaded.</p></div>
+          <div class="bottom-spacer"></div>
+        </div>
+      </section>
+
+      <nav class="bottom-nav" id="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item selected" data-nav="home"><span class="nav-icon">⌂</span><span>Home</span></button>
+        <button class="nav-item" data-nav="projects"><span class="nav-icon">▦</span><span>Projects</span></button>
+        <button class="nav-item" data-nav="effects"><span class="nav-icon">✧</span><span>Effects</span></button>
+        <button class="nav-item" data-nav="profile"><span class="nav-icon">◉</span><span>Studio</span></button>
+        <button class="nav-create" data-action="new-project" aria-label="New project">＋</button>
+      </nav>
+    </main>
+
+    <section class="editor-screen hidden" id="editor-screen" aria-label="Video editor">
+      <header class="editor-header">
+        <button class="editor-back icon-button" data-action="close-editor" aria-label="Back to projects">‹</button>
+        <button class="editor-project-name" data-action="rename-project"><strong id="editor-title">Untitled project</strong><span id="editor-spec">1920 × 1080 · 30 fps</span></button>
+        <div class="editor-header-actions">
+          <button class="editor-tool-button" data-action="undo" aria-label="Undo">↶</button>
+          <button class="editor-tool-button" data-action="redo" aria-label="Redo">↷</button>
+          <button class="export-top-button" data-action="export">Export <span>↗</span></button>
+        </div>
+      </header>
+
+      <div class="preview-zone" id="preview-zone">
+        <div class="preview-stage" id="preview-stage">
+          <video id="preview-video" playsinline preload="metadata"></video>
+          <img id="preview-image" alt="Selected image layer">
+          <div class="preview-empty" id="preview-empty"><span class="empty-play">▶</span><strong>Your canvas is ready</strong><span>Add a video, photo or text layer to begin.</span><button data-action="open-media" data-kind="video">＋ Add media</button></div>
+          <div class="stage-shape hidden" id="stage-shape"></div>
+          <div class="stage-text hidden" id="stage-text"></div>
+          <span class="stage-safe-area" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <div class="transport-bar">
+        <button class="transport-fit" data-action="toggle-fit">FIT <span>⌄</span></button>
+        <div class="time-readout"><span id="playhead-time">00:00:00</span><i>/</i><span id="total-time">00:00:15</span></div>
+        <div class="transport-actions">
+          <button class="transport-button" data-action="jump-start" aria-label="Go to start">|◀</button>
+          <button class="play-button" id="play-button" data-action="toggle-play" aria-label="Play">▶</button>
+          <button class="transport-button" data-action="jump-end" aria-label="Go to end">▶|</button>
+        </div>
+        <button class="transport-zoom" data-action="zoom-timeline" aria-label="Zoom timeline">⌕</button>
+      </div>
+
+      <div class="timeline-area" id="timeline-area">
+        <div class="timeline-toolbar">
+          <button class="timeline-action" data-action="split" aria-label="Split clip"><span>✂</span><small>Split</small></button>
+          <button class="timeline-action" data-action="duplicate" aria-label="Duplicate clip"><span>▣</span><small>Copy</small></button>
+          <button class="timeline-action" data-action="delete-clip" aria-label="Delete selected layer"><span>⌫</span><small>Delete</small></button>
+          <span class="timeline-divider"></span>
+          <button class="timeline-action" data-action="open-media" data-kind="video" aria-label="Add media"><span class="timeline-add">＋</span><small>Add</small></button>
+          <div class="timeline-end-spacer"></div>
+          <span class="autosave-label"><span class="autosave-dot"></span> Saved</span>
+        </div>
+        <div class="timeline-scroll" id="timeline-scroll">
+          <div class="timeline-content" id="timeline-content">
+            <div class="timeline-ruler" id="timeline-ruler"></div>
+            <div class="track-stack" id="track-stack"></div>
+            <div class="playhead-line" id="playhead-line"><span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="clip-inspector hidden" id="clip-inspector"></div>
+
+      <div class="editor-tools" id="editor-tools">
+        <button class="editor-tool" data-action="open-media" data-kind="video"><span class="tool-icon media-icon">▣</span><span>Media</span></button>
+        <button class="editor-tool" data-action="open-media" data-kind="audio"><span class="tool-icon audio-icon">♫</span><span>Audio</span></button>
+        <button class="editor-tool" data-action="add-text"><span class="tool-icon text-icon">T</span><span>Text</span></button>
+        <button class="editor-tool" data-action="add-shape"><span class="tool-icon shape-icon">◇</span><span>Shape</span></button>
+        <button class="editor-tool" data-action="open-effects"><span class="tool-icon effect-icon">✧</span><span>Effects</span></button>
+        <button class="editor-tool" data-action="export"><span class="tool-icon export-icon">↗</span><span>Export</span></button>
+      </div>
+    </section>
+    <input id="media-picker" class="visually-hidden" type="file" multiple>
+    <div class="modal-root" id="modal-root" aria-live="polite"></div>
+    <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+  </div>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# build output
+android/build/
+android/tools/keystore/*.p12
+*.keystore
+*.jks
+
+# toolchain / dependencies
+node_modules/
+.cache/
+
+# editors & OS noise
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.iml
